@@ -45,7 +45,7 @@ class FigmaDisplayer(QMainWindow):
                 elif obj['shapeType'] == "SQUARE" or obj['shapeType'] == "ROUNDED_RECTANGLE":
                     qp.drawRoundedRect(box, 15, 15)
                 elif obj['shapeType'] == "TRIANGLE_DOWN":
-                    points = (QPointF(x, y), QPointF(x + width, y), QPointF((x + width) // 2, y + height))
+                    points = (QPointF(x, y), QPointF(x + width, y), QPointF(x + width // 2, y + height))
                     qp.drawPolygon(QPolygonF(points))
                 elif obj['shapeType'] == "PARALLELOGRAM_RIGHT":
                     points = (
