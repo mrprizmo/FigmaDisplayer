@@ -1,12 +1,13 @@
 import sys
 from logging.config import dictConfig
+from math import ceil
 import logging
 import requests
 from PyQt5 import uic
 from typing import Any
-from PyQt5.QtGui import QPixmap, QPainter, QColor, QBrush, QPolygonF, QPen, QPainterPath
 from PyQt5.QtCore import Qt, QEvent, QRect, QPointF
 from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtGui import QPixmap, QPainter, QColor, QBrush, QPolygonF, QPen, QPainterPath, QFont
 
 dictLogConfig = {
         'version': 1,
@@ -50,6 +51,7 @@ class FigmaDisplayer(QMainWindow):
         self.need_to_update = 1
         self.offset_x = self.offset_y = 0
         self.scale = 1
+        self.eps = 20
         self.response = []
         self.update()
 
@@ -112,7 +114,11 @@ class FigmaDisplayer(QMainWindow):
                         qp.drawText(box, Qt.AlignCenter, obj['characters'])
 
                     elif obj['type'] == "TEXT":
-                        pass
+                        qp.setFont(QFont(obj["style"]["fontFamily"], obj["style"]["fontSize"]))
+                        qp.setPen(QPen(color))
+                        width, height = obj['absoluteBoundingBox']['width'] * self.scale + self.eps, obj['absoluteBoundingBox']['height'] * self.scale + self.eps
+                        box = QRect(x, y, width, height)
+                        qp.drawText(box, Qt.AlignCenter, obj['characters'].strip())
                 except BaseException as exeption:
                     log.exception(f"ERROR:\n{exeption.args}")
 
